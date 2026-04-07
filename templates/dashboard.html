@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="wrap">
+  <h1>Model Dashboard</h1>
+  <p class="sub">Trained on {{ meta.dataset_size }} IPOs (2018–2024) · {{ meta.positive_rate }}% positive listings</p>
+
+  <div class="g4" style="margin-bottom:1.25rem;">
+    <div class="metric">
+      <div class="ml">Classifier Accuracy</div>
+      <div class="mv" style="color:#2563EB;">{{ meta.classifier.accuracy }}%</div>
+      <div class="ms">XGBoost</div>
+    </div>
+    <div class="metric">
+      <div class="ml">AUC-ROC</div>
+      <div class="mv">{{ meta.classifier.auc_roc }}</div>
+      <div class="ms">CV: {{ meta.classifier.cv_accuracy }}%</div>
+    </div>
+    <div class="metric">
+      <div class="ml">Regressor MAE</div>
+      <div class="mv">±{{ meta.regressor.mae }}%</div>
+      <div class="ms">Gain % error</div>
+    </div>
+    <div class="metric">
+      <div class="ml">R² Score</div>
+      <div class="mv">{{ meta.regressor.r2 }}</div>
+      <div class="ms">Random Forest</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:1.25rem;">
+    <div class="ct">Model Comparison</div>
+    <div style="display:flex;gap:1.5rem;flex-wrap:wrap;">
+      {% for name, acc in meta.model_comparison.items() %}
+      <div style="text-align:center;min-width:120px;">
+        <div style="font-size:24px;font-weight:700;color:{% if '★' in name %}#2563EB{% else %}#94A3B8{% endif %};">{{ acc }}%</div>
+        <div style="font-size:12px;color:#64748B;margin-top:2px;">{{ name }}</div>
+        {% if '★' in name %}<div style="height:3px;background:#2563EB;border-radius:2px;margin-top:6px;"></div>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#64748B;margin-bottom:.6rem;">Plots</div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem;" id="ptabs">
+    {% for name, file in plots %}
+    <button onclick="showPlot('{{ file }}',this)"
+      style="padding:6px 14px;font-size:13px;font-weight:500;cursor:pointer;
+             border-radius:20px;border:1px solid #E2E8F0;
+             background:{% if loop.first %}#2563EB{% else %}white{% endif %};
+             color:{% if loop.first %}white{% else %}#64748B{% endif %};">
+      {{ name }}
+    </button>
+    {% endfor %}
+  </div>
+  <div class="card" style="padding:1rem;text-align:center;">
+    <img id="pimg" src="/static/{{ plots[0][1] }}" style="max-width:100%;border-radius:6px;">
+  </div>
+  <div style="margin-top:1.5rem;text-align:center;">
+    <a href="/predict" class="btn btn-p">Try a Prediction →</a>
+  </div>
+</div>
+<script>
+function showPlot(f,b){
+  document.getElementById('pimg').src='/static/'+f;
+  document.querySelectorAll('#ptabs button').forEach(x=>{
+    x.style.background='white';x.style.color='#64748B';x.style.borderColor='#E2E8F0';
+  });
+  b.style.background='#2563EB';b.style.color='white';b.style.borderColor='#2563EB';
+}
+</script>
+{% endblock %}

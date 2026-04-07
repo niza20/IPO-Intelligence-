@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Model Info{% endblock %}
+{% block content %}
+<div class="wrap">
+  <h1>Model Architecture</h1>
+  <p class="sub">Features, preprocessing, and model stack explained.</p>
+
+  <div class="g2" style="margin-bottom:1.25rem;">
+    <div class="card">
+      <div class="ct">Model 1 — Classifier</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:4px;">XGBoost</div>
+      <div style="font-size:13px;color:#64748B;margin-bottom:10px;">Predicts win/loss (positive listing)</div>
+      <div style="font-size:13px;line-height:2;">
+        Accuracy: <strong>{{ meta.classifier.accuracy }}%</strong><br>
+        AUC-ROC: <strong>{{ meta.classifier.auc_roc }}</strong><br>
+        5-fold CV: <strong>{{ meta.classifier.cv_accuracy }}%</strong><br>
+        Trees: 300 · Depth: 4 · LR: 0.03 · scale_pos_weight balanced
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct">Model 2 — Regressor</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:4px;">Random Forest</div>
+      <div style="font-size:13px;color:#64748B;margin-bottom:10px;">Predicts listing gain %</div>
+      <div style="font-size:13px;line-height:2;">
+        MAE: <strong>±{{ meta.regressor.mae }}%</strong><br>
+        RMSE: <strong>{{ meta.regressor.rmse }}%</strong><br>
+        R²: <strong>{{ meta.regressor.r2 }}</strong><br>
+        Trees: 300 · Depth: 10 · Min samples/leaf: 3
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:1.25rem;">
+    <div class="ct">Preprocessing Pipeline</div>
+    <div style="display:flex;gap:0;align-items:center;flex-wrap:wrap;gap:4px;">
+      {% for s in ['Raw Input (23 features)', 'Label Encode (sector, mood)', 'Feature Engineering (+10)', 'KNN Imputation k=5', 'StandardScaler', 'XGBoost / RF'] %}
+      <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:7px;padding:7px 13px;font-size:13px;font-weight:500;">{{ s }}</div>
+      {% if not loop.last %}<span style="color:#94A3B8;font-size:16px;">→</span>{% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:1.25rem;">
+    <div class="card">
+      <div class="ct">Top Features — Classifier</div>
+      {% for name, val in meta.top_features_clf.items() %}
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="font-size:13px;min-width:140px;color:#475569;">{{ name }}</span>
+        <div style="flex:1;height:6px;background:#F1F5F9;border-radius:3px;">
+          <div style="width:{{ [val*700,100]|min|int }}%;height:6px;background:#2563EB;border-radius:3px;"></div>
+        </div>
+        <span style="font-size:12px;font-weight:600;min-width:38px;text-align:right;">{{ val }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="card">
+      <div class="ct">Top Features — Regressor</div>
+      {% for name, val in meta.top_features_reg.items() %}
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="font-size:13px;min-width:140px;color:#475569;">{{ name }}</span>
+        <div style="flex:1;height:6px;background:#F1F5F9;border-radius:3px;">
+          <div style="width:{{ [val*700,100]|min|int }}%;height:6px;background:#0D9488;border-radius:3px;"></div>
+        </div>
+        <span style="font-size:12px;font-weight:600;min-width:38px;text-align:right;">{{ val }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ct">All Features ({{ meta.features|length }})</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">
+      {% for f in meta.features %}<span class="tag">{{ f }}</span>{% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

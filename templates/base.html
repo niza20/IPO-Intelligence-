@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IPO Intelligence — {% block title %}{% endblock %}</title>
+<style>
+:root{--bg:#F8FAFC;--s:#fff;--b:#E2E8F0;--t:#0F172A;--m:#64748B;
+      --a:#2563EB;--g:#16A34A;--r:#DC2626;--o:#D97706;
+      --gbg:#DCFCE7;--rbg:#FEE2E2;--obg:#FEF3C7;
+      --gt:#15803D;--rt:#B91C1C;--ot:#B45309;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--t);font-size:15px;line-height:1.6;}
+a{color:var(--a);text-decoration:none;}
+nav{background:var(--s);border-bottom:1px solid var(--b);padding:0 2rem;
+    display:flex;align-items:center;gap:2rem;height:56px;position:sticky;top:0;z-index:100;}
+.brand{font-size:16px;font-weight:700;} .brand span{color:var(--a);}
+nav a{font-size:14px;color:var(--m);padding:4px 0;border-bottom:2px solid transparent;transition:.15s;}
+nav a:hover,.active-link{color:var(--t)!important;border-color:var(--a)!important;}
+.wrap{max-width:1100px;margin:0 auto;padding:2rem 1.5rem;}
+h1{font-size:22px;font-weight:700;margin-bottom:4px;}
+.sub{font-size:14px;color:var(--m);margin-bottom:1.75rem;}
+.card{background:var(--s);border:1px solid var(--b);border-radius:10px;padding:1.25rem 1.5rem;}
+.ct{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--m);margin-bottom:.9rem;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;}
+.metric{background:var(--s);border:1px solid var(--b);border-radius:10px;padding:1.1rem 1.25rem;}
+.ml{font-size:12px;color:var(--m);margin-bottom:5px;}
+.mv{font-size:26px;font-weight:700;}
+.ms{font-size:12px;color:var(--m);margin-top:2px;}
+.badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;}
+.bg{background:var(--gbg);color:var(--gt);}
+.br{background:var(--rbg);color:var(--rt);}
+.bo{background:var(--obg);color:var(--ot);}
+.bb{background:#DBEAFE;color:#1E40AF;}
+.bx{background:#F1F5F9;color:#475569;}
+label{display:block;font-size:13px;font-weight:500;color:var(--m);margin-bottom:5px;}
+input[type=number],input[type=text],select{
+  width:100%;padding:8px 11px;border:1px solid var(--b);
+  border-radius:7px;font-size:14px;background:var(--bg);color:var(--t);transition:.15s;}
+input:focus,select:focus{outline:none;border-color:var(--a);}
+.btn{display:inline-block;padding:9px 22px;border-radius:7px;font-size:14px;
+     font-weight:600;cursor:pointer;border:none;transition:.15s;}
+.btn-p{background:var(--a);color:#fff;} .btn-p:hover{opacity:.88;}
+hr{height:1px;background:var(--b);border:none;margin:1.25rem 0;}
+.tag{font-size:11px;background:#F1F5F9;color:#475569;padding:2px 8px;
+     border-radius:4px;font-weight:500;display:inline-block;}
+@media(max-width:700px){.g2,.g3,.g4{grid-template-columns:1fr;}.wrap{padding:1rem;}}
+</style>
+</head>
+<body>
+<nav>
+  <span class="brand">IPO <span>Intelligence</span></span>
+  <a href="/" class="{{ 'active-link' if request.endpoint=='dashboard' else '' }}">Dashboard</a>
+  <a href="/predict" class="{{ 'active-link' if request.endpoint=='pred_page' else '' }}">Predict</a>
+  <a href="/about" class="{{ 'active-link' if request.endpoint=='about' else '' }}">Model Info</a>
+</nav>
+{% block content %}{% endblock %}
+</body>
+</html>

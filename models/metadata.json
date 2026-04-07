@@ -1,0 +1,92 @@
+{
+  "classifier": {
+    "name": "XGBoost",
+    "accuracy": 97.5,
+    "auc_roc": 0.997,
+    "cv_accuracy": 95.5,
+    "confusion_matrix": [
+      [
+        22,
+        0
+      ],
+      [
+        2,
+        56
+      ]
+    ]
+  },
+  "regressor": {
+    "name": "RandomForest",
+    "mae": 2.7,
+    "rmse": 4.56,
+    "r2": 0.968
+  },
+  "model_comparison": {
+    "XGBoost": 97.5,
+    "Logistic Regression": 95.0,
+    "Random Forest": 96.2,
+    "Gradient Boosting": 95.0
+  },
+  "top_features_clf": {
+    "total_sub": 0.258,
+    "sub_score": 0.1901,
+    "sub_hni": 0.1405,
+    "sub_qib": 0.1335,
+    "gmp_x_qib": 0.1044,
+    "sub_retail": 0.0666,
+    "gmp_pct": 0.053,
+    "gmp_bull": 0.0508
+  },
+  "top_features_reg": {
+    "total_sub": 0.5124,
+    "sub_score": 0.2822,
+    "sub_hni": 0.1043,
+    "gmp_pct": 0.0382,
+    "sub_qib": 0.0343,
+    "gmp_x_qib": 0.0147,
+    "gmp_bull": 0.0025,
+    "sub_retail": 0.002
+  },
+  "dataset_size": 400,
+  "positive_rate": 72.8,
+  "features": [
+    "gmp_pct",
+    "sub_qib",
+    "sub_hni",
+    "sub_retail",
+    "total_sub",
+    "sub_score",
+    "qib_hni_ratio",
+    "gmp_x_qib",
+    "gmp_bull",
+    "pe_vs_sector",
+    "val_risk",
+    "low_valuation",
+    "promoter_holding",
+    "mood_enc",
+    "sector_enc",
+    "company_age",
+    "revenue_growth_pct",
+    "roce_pct",
+    "debt_equity",
+    "size_log",
+    "is_tech_bull",
+    "roce_x_growth",
+    "issue_price"
+  ],
+  "mood_classes": [
+    "bear",
+    "bull",
+    "neutral"
+  ],
+  "sector_classes": [
+    "Auto",
+    "FMCG",
+    "Finance",
+    "Infra",
+    "Mfg",
+    "Pharma",
+    "Retail",
+    "Tech"
+  ]
+}

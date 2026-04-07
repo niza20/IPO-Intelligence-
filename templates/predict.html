@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Predict{% endblock %}
+{% block content %}
+<div class="wrap">
+  <h1>IPO Prediction</h1>
+  <p class="sub">Enter IPO parameters — model predicts listing gain % and win probability.</p>
+
+  <div style="display:grid;grid-template-columns:360px 1fr;gap:1.5rem;align-items:start;">
+    <div class="card">
+      <form method="POST">
+        <div class="ct">Parameters</div>
+        <div style="margin-bottom:11px;"><label>Issue Price (₹)</label>
+          <input type="number" name="issue_price" value="{{ form.issue_price or '450' }}" min="1" required></div>
+        <div style="margin-bottom:11px;"><label>Issue Size (₹ Cr)</label>
+          <input type="number" name="issue_size_cr" value="{{ form.issue_size_cr or '1200' }}"></div>
+        <div style="margin-bottom:11px;"><label>GMP % (of issue price)</label>
+          <input type="number" name="gmp_pct" value="{{ form.gmp_pct or '15' }}" step="0.5"></div>
+        <hr>
+        <div style="font-size:12px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">Subscription</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:11px;">
+          <div><label>QIB (x)</label><input type="number" name="sub_qib" value="{{ form.sub_qib or '42' }}" step="0.1"></div>
+          <div><label>HNI (x)</label><input type="number" name="sub_hni" value="{{ form.sub_hni or '18' }}" step="0.1"></div>
+          <div><label>Retail (x)</label><input type="number" name="sub_retail" value="{{ form.sub_retail or '6' }}" step="0.1"></div>
+        </div>
+        <hr>
+        <div style="font-size:12px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">Fundamentals</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:11px;">
+          <div><label>P/E vs Sector (1=fair)</label><input type="number" name="pe_vs_sector" value="{{ form.pe_vs_sector or '1.1' }}" step="0.05"></div>
+          <div><label>Promoter Holding %</label><input type="number" name="promoter_holding" value="{{ form.promoter_holding or '62' }}"></div>
+          <div><label>Revenue Growth %</label><input type="number" name="revenue_growth_pct" value="{{ form.revenue_growth_pct or '30' }}"></div>
+          <div><label>ROCE %</label><input type="number" name="roce_pct" value="{{ form.roce_pct or '18' }}"></div>
+          <div><label>Debt / Equity</label><input type="number" name="debt_equity" value="{{ form.debt_equity or '0.4' }}" step="0.05"></div>
+          <div><label>Company Age (yrs)</label><input type="number" name="company_age" value="{{ form.company_age or '8' }}"></div>
+        </div>
+        <hr>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px;">
+          <div><label>Sector</label>
+            <select name="sector">{% for s in sectors %}<option value="{{ s }}" {{ 'selected' if form.sector==s }}>{{ s }}</option>{% endfor %}</select></div>
+          <div><label>Market Mood</label>
+            <select name="market_mood">{% for m in moods %}<option value="{{ m }}" {{ 'selected' if form.market_mood==m }}>{{ m|capitalize }}</option>{% endfor %}</select></div>
+        </div>
+        <button type="submit" class="btn btn-p" style="width:100%;padding:10px;">Run Prediction</button>
+      </form>
+    </div>
+
+    <div>
+      {% if result %}
+      <div class="g2" style="margin-bottom:1rem;">
+        <div class="metric">
+          <div class="ml">Predicted Listing Gain</div>
+          <div class="mv" style="color:{{ '#16A34A' if result.gain_pct >= 0 else '#DC2626' }};">
+            {{ '+' if result.gain_pct >= 0 else '' }}{{ result.gain_pct }}%</div>
+          <div class="ms">Target ₹{{ result.target }}</div>
+        </div>
+        <div class="metric">
+          <div class="ml">Win Probability</div>
+          <div class="mv">{{ result.win_prob }}%</div>
+          <div class="ms">P(listing above issue)</div>
+        </div>
+      </div>
+      <div class="g2" style="margin-bottom:1rem;">
+        <div class="metric">
+          <div class="ml">Risk Score</div>
+          <div class="mv" style="color:{% if result.risk<35 %}#16A34A{% elif result.risk<60 %}#D97706{% else %}#DC2626{% endif %};">
+            {{ result.risk }}/100</div>
+          <div class="ms">{% if result.risk<35 %}Low{% elif result.risk<60 %}Moderate{% else %}High{% endif %} Risk</div>
+        </div>
+        <div class="metric">
+          <div class="ml">Recommendation</div>
+          <div style="margin-top:10px;">
+            <span class="badge b{{ result.rec_cls }}" style="font-size:15px;padding:7px 18px;">{{ result.rec }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:1rem;">
+        <div class="ct">Win Probability</div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="flex:1;height:10px;background:#F1F5F9;border-radius:5px;overflow:hidden;">
+            <div style="width:{{ result.win_prob }}%;height:10px;border-radius:5px;
+                        background:{% if result.win_prob>=65 %}#16A34A{% elif result.win_prob>=45 %}#D97706{% else %}#DC2626{% endif %};"></div>
+          </div>
+          <span style="font-weight:700;font-size:16px;">{{ result.win_prob }}%</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#94A3B8;margin-top:4px;">
+          <span>0% Loss</span><span>50%</span><span>100% Gain</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ct">Risk Score</div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="flex:1;height:10px;background:#F1F5F9;border-radius:5px;overflow:hidden;">
+            <div style="width:{{ result.risk }}%;height:10px;border-radius:5px;
+                        background:{% if result.risk<35 %}#16A34A{% elif result.risk<60 %}#D97706{% else %}#DC2626{% endif %};"></div>
+          </div>
+          <span style="font-weight:700;font-size:16px;">{{ result.risk }}/100</span>
+        </div>
+      </div>
+      {% else %}
+      <div class="card" style="text-align:center;padding:3rem;color:#94A3B8;">
+        <div style="font-size:40px;margin-bottom:12px;">&#128269;</div>
+        <div style="font-size:16px;font-weight:600;color:#475569;margin-bottom:6px;">No prediction yet</div>
+        <div style="font-size:14px;">Fill the form and click Run Prediction.</div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
