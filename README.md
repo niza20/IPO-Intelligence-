@@ -9,13 +9,13 @@
 
 ---
 
-## ✨ Key Features
+##  Key Features
 
-*   **🏆 High-Precision Classification**: Achieves **94.3% accuracy** using a Soft-Voting Ensemble of XGBoost, Random Forest, Gradient Boosting, and Logistic Regression.
-*   **📊 Insightful Dashboard**: Interactive Flask-based interface with real-time predictions and 6 deep-dive EDA visualizations.
-*   **🧠 Robust Data Strategy**: Utilizes rule-based synthetic data generation (3,000+ records) and SMOTE for addressing class imbalances.
-*   **📈 Listing Gain Regression**: Predicts the specific percentage gain on listing with a Mean Absolute Error of ±12.98%.
-*   **🌍 Multi-Sector Support**: Tailored predictions for Tech, Finance, Pharma, Infra, FMCG, Auto, Retail, and Manufacturing.
+*   ** High-Precision Classification**: Achieves **94.3% accuracy** using a Soft-Voting Ensemble of XGBoost, Random Forest, Gradient Boosting, and Logistic Regression.
+*   ** Insightful Dashboard**: Interactive Flask-based interface with real-time predictions and 6 deep-dive EDA visualizations.
+*   ** Robust Data Strategy**: Utilizes rule-based synthetic data generation (3,000+ records) and SMOTE for addressing class imbalances.
+*   ** Listing Gain Regression**: Predicts the specific percentage gain on listing with a Mean Absolute Error of ±12.98%.
+*   **Multi-Sector Support**: Tailored predictions for Tech, Finance, Pharma, Infra, FMCG, Auto, Retail, and Manufacturing.
 
 ---
 
