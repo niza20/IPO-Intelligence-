@@ -3,7 +3,7 @@ IPO Intelligence — Flask Web App
 3 pages: Dashboard / Predict / Model Info
 """
 from flask import Flask, render_template, request, jsonify
-import numpy as np, joblib, json, os
+import numpy as np, pandas as pd, joblib, json, os
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 app  = Flask(__name__, static_folder=os.path.join(BASE, 'static'))
@@ -60,7 +60,7 @@ def build_features(raw):
            pe, val_r, low_val, prom, me, se,
            age, rev_gr, roce, de, slog, is_tb, rxg, price]
 
-    X = np.array(row, dtype=float).reshape(1, -1)
+    X = pd.DataFrame([row], columns=A['features'])
     X = A['imputer'].transform(X)
     X = A['scaler'].transform(X)
     return X, price

@@ -92,15 +92,15 @@ for i, g in enumerate(gmp):
         gains[i] = rng.uniform(-35, -1)
 
     elif g < 0:
-        # 23% positive
-        if rng.random() < 0.77:            # loss
+        # 10% positive
+        if rng.random() < 0.90:            # loss
             gains[i] = float(np.clip(rng.normal(-9, 5),   -40, -0.1))
         else:                              # gain
             gains[i] = float(np.clip(rng.normal(4,  3),    0.1,  15))
 
     elif g < 10:
-        # 85% positive
-        if rng.random() < 0.15:           # loss
+        # 95% positive
+        if rng.random() < 0.05:           # loss
             gains[i] = float(np.clip(rng.normal(-4, 3),   -20, -0.1))
         else:                              # gain
             gains[i] = float(np.clip(rng.normal(11, 7),    0.1,  45))
@@ -136,9 +136,10 @@ sub_hni    = np.clip(sub_qib * rng.uniform(0.25, 0.75, N_SYNTH),  0.5, 220)
 sub_retail = np.clip(sub_qib * rng.uniform(0.10, 0.35, N_SYNTH),  0.5,  85)
 
 # ── Step 5: Remaining features from real data distributions ──────────────────
-sec_list = list(sectors_dist.index)
-sec_prob = list(sectors_dist.values)
-sectors  = rng.choice(sec_list, size=N_SYNTH, p=sec_prob)
+# ── Step 5: Remaining features ────────────────────────────────────────────────
+# Use expanded sector list to match app.py
+sec_list = ["Tech","Finance","Pharma","Infra","FMCG","Auto","Retail","Mfg"]
+sectors  = rng.choice(sec_list, size=N_SYNTH)
 years    = rng.choice(list(range(2016, 2027)), size=N_SYNTH)
 
 def rs(col): return sample(stats[col]['mean'], stats[col]['std'],

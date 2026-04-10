@@ -1,58 +1,58 @@
 {
   "classifier": {
-    "name": "VotingEnsemble (RF+GB+LR)",
-    "accuracy": 90.3,
-    "auc_roc": 0.967,
-    "cv_accuracy": 90.9,
+    "name": "VotingEnsemble (RF+GB+LR+XGB)",
+    "accuracy": 94.3,
+    "auc_roc": 0.985,
+    "cv_accuracy": 94.6,
     "confusion_matrix": [
       [
-        152,
-        21
+        163,
+        8
       ],
       [
-        37,
-        390
+        26,
+        403
       ]
     ]
   },
   "regressor": {
     "name": "RandomForest",
-    "mae": 13.44,
-    "rmse": 17.66,
-    "r2": 0.671
+    "mae": 12.98,
+    "rmse": 17.72,
+    "r2": 0.68
   },
   "model_comparison": {
-    "Voting Ensemble": 90.3,
-    "Random Forest": 90.3,
-    "Gradient Boosting": 90.3,
-    "XGBoost": 89.7,
-    "Logistic Regression": 89.2
+    "Voting Ensemble": 94.3,
+    "Random Forest": 94.0,
+    "Gradient Boosting": 94.0,
+    "XGBoost": 94.2,
+    "Logistic Regression": 92.7
   },
   "top_features_clf": {
-    "GMP %": 0.4959,
-    "GMP\u00d7Mood": 0.0948,
-    "GMP\u00d7QIB": 0.0938,
-    "QIB Sub": 0.0358,
-    "Total Sub": 0.0319,
-    "Sub Score": 0.0285,
-    "Retail Sub": 0.0283,
-    "HNI Sub": 0.0272
+    "GMP %": 0.3841,
+    "GMP\u00d7QIB": 0.2001,
+    "GMP\u00d7Mood": 0.1464,
+    "QIB Sub": 0.035,
+    "Total Sub": 0.0299,
+    "Sub Score": 0.0255,
+    "HNI Sub": 0.0254,
+    "Market Mood": 0.0249
   },
   "top_features_reg": {
-    "GMP %": 0.4411,
-    "GMP\u00d7QIB": 0.1319,
-    "GMP\u00d7Mood": 0.0833,
-    "HNI Sub": 0.0279,
-    "Promoter %": 0.0279,
-    "QIB/HNI Ratio": 0.0273,
-    "Debt/Equity": 0.026,
-    "Issue Price": 0.0257
+    "GMP %": 0.4359,
+    "GMP\u00d7QIB": 0.124,
+    "GMP\u00d7Mood": 0.0884,
+    "ROCE %": 0.0283,
+    "Co. Age": 0.0277,
+    "QIB/HNI Ratio": 0.0276,
+    "ROCE\u00d7Growth": 0.0273,
+    "Promoter %": 0.0273
   },
   "dataset_size": 3000,
   "year_min": 2016,
   "year_max": 2026,
-  "positive_rate": 71.1,
-  "avg_gain": 20.5,
+  "positive_rate": 71.5,
+  "avg_gain": 20.6,
   "features": [
     "gmp_pct",
     "sub_qib",
@@ -84,9 +84,14 @@
     "neutral"
   ],
   "sector_classes": [
+    "Auto",
+    "FMCG",
     "Finance",
+    "Infra",
+    "Mfg",
     "Other",
     "Pharma",
+    "Retail",
     "Tech"
   ]
 }

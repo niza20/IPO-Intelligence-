@@ -155,7 +155,7 @@ print(f"         After : {(yc_tr_sm==1).sum()} gain  |  {(yc_tr_sm==0).sum()} lo
       f"→ {len(X_tr_sm)} total")
 
 # ── 9A. Soft-Voting Ensemble Classifier (Primary) ─────────────────────────────
-print("\n[MODEL 1]  Voting Ensemble (RF + GradBoost + LR) — targeting 91%+")
+print("\n[MODEL 1]  Voting Ensemble (RF + GradBoost + LR + Tuned XGBoost) — targeting 95%+")
 
 # Individual estimators — each tuned + SMOTE-trained
 _rf  = RandomForestClassifier(
@@ -169,10 +169,15 @@ _gb  = GradientBoostingClassifier(
     random_state=SEED,
 )
 _lr  = LogisticRegression(max_iter=2000, C=1.0, random_state=SEED)
+_xgb = xgb.XGBClassifier(
+    n_estimators=1000, max_depth=6, learning_rate=0.01,
+    subsample=0.7, colsample_bytree=0.7, min_child_weight=2,
+    eval_metric='logloss', random_state=SEED, verbosity=0
+)
 
 # Soft voting: averages class probabilities — consistently outperforms any single model
 ensemble = VotingClassifier(
-    estimators=[('rf', _rf), ('gb', _gb), ('lr', _lr)],
+    estimators=[('rf', _rf), ('gb', _gb), ('lr', _lr), ('xgb', _xgb)],
     voting='soft',
     n_jobs=-1,
 )
@@ -192,6 +197,9 @@ _ens_cv  = VotingClassifier(
         ('gb', GradientBoostingClassifier(n_estimators=300, max_depth=5,
              learning_rate=0.05, subsample=0.80, random_state=SEED)),
         ('lr', LogisticRegression(max_iter=2000, C=1.0, random_state=SEED)),
+        ('xgb', xgb.XGBClassifier(n_estimators=1000, max_depth=6, learning_rate=0.01,
+             subsample=0.7, colsample_bytree=0.7, min_child_weight=2, eval_metric='logloss',
+             random_state=SEED, verbosity=0)),
     ],
     voting='soft', n_jobs=-1,
 )
@@ -456,7 +464,7 @@ print("   ✓ Correlation heatmap")
 # ── 12. Save metadata ─────────────────────────────────────────────────────────
 meta = {
     "classifier": {
-        "name":             "VotingEnsemble (RF+GB+LR)",
+        "name":             "VotingEnsemble (RF+GB+LR+XGB)",
         "accuracy":         round(acc * 100, 1),
         "auc_roc":          round(auc, 3),
         "cv_accuracy":      round(cv_acc.mean() * 100, 1),
