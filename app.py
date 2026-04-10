@@ -11,7 +11,7 @@ app  = Flask(__name__, static_folder=os.path.join(BASE, 'static'))
 def load():
     d = os.path.join(BASE, 'models')
     return {
-        "clf":        joblib.load(os.path.join(d, 'xgb_classifier.pkl')),
+        "clf":        joblib.load(os.path.join(d, 'classifier.pkl')),
         "reg":        joblib.load(os.path.join(d, 'rf_regressor.pkl')),
         "imputer":    joblib.load(os.path.join(d, 'imputer.pkl')),
         "scaler":     joblib.load(os.path.join(d, 'scaler.pkl')),
@@ -119,4 +119,4 @@ def about():
     return render_template('about.html', meta=A['meta'])
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5001)

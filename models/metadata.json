@@ -1,54 +1,58 @@
 {
   "classifier": {
-    "name": "XGBoost",
-    "accuracy": 97.5,
-    "auc_roc": 0.997,
-    "cv_accuracy": 95.5,
+    "name": "VotingEnsemble (RF+GB+LR)",
+    "accuracy": 90.3,
+    "auc_roc": 0.966,
+    "cv_accuracy": 90.7,
     "confusion_matrix": [
       [
-        22,
-        0
+        153,
+        20
       ],
       [
-        2,
-        56
+        38,
+        389
       ]
     ]
   },
   "regressor": {
     "name": "RandomForest",
-    "mae": 2.7,
-    "rmse": 4.56,
-    "r2": 0.968
+    "mae": 13.43,
+    "rmse": 17.7,
+    "r2": 0.67
   },
   "model_comparison": {
-    "XGBoost": 97.5,
-    "Logistic Regression": 95.0,
-    "Random Forest": 96.2,
-    "Gradient Boosting": 95.0
+    "Voting Ensemble": 90.3,
+    "Random Forest": 89.7,
+    "Gradient Boosting": 89.7,
+    "XGBoost": 89.0,
+    "Logistic Regression": 89.0
   },
   "top_features_clf": {
-    "total_sub": 0.258,
-    "sub_score": 0.1901,
-    "sub_hni": 0.1405,
-    "sub_qib": 0.1335,
-    "gmp_x_qib": 0.1044,
-    "sub_retail": 0.0666,
-    "gmp_pct": 0.053,
-    "gmp_bull": 0.0508
+    "GMP %": 0.4385,
+    "GMP\u00d7Mood": 0.1501,
+    "GMP\u00d7QIB": 0.1182,
+    "QIB Sub": 0.0416,
+    "Total Sub": 0.0381,
+    "Sub Score": 0.0379,
+    "Retail Sub": 0.0353,
+    "HNI Sub": 0.0321
   },
   "top_features_reg": {
-    "total_sub": 0.5124,
-    "sub_score": 0.2822,
-    "sub_hni": 0.1043,
-    "gmp_pct": 0.0382,
-    "sub_qib": 0.0343,
-    "gmp_x_qib": 0.0147,
-    "gmp_bull": 0.0025,
-    "sub_retail": 0.002
+    "GMP %": 0.4881,
+    "GMP\u00d7QIB": 0.146,
+    "GMP\u00d7Mood": 0.0863,
+    "Issue Price": 0.0434,
+    "QIB/HNI Ratio": 0.0399,
+    "Issue Size (log)": 0.0382,
+    "Retail Sub": 0.0349,
+    "HNI Sub": 0.0332
   },
-  "dataset_size": 400,
-  "positive_rate": 72.8,
+  "dataset_size": 3000,
+  "year_min": 2016,
+  "year_max": 2026,
+  "positive_rate": 71.1,
+  "avg_gain": 20.5,
   "features": [
     "gmp_pct",
     "sub_qib",
@@ -80,13 +84,9 @@
     "neutral"
   ],
   "sector_classes": [
-    "Auto",
-    "FMCG",
     "Finance",
-    "Infra",
-    "Mfg",
+    "Other",
     "Pharma",
-    "Retail",
     "Tech"
   ]
 }

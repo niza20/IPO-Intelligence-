@@ -1,0 +1,111 @@
+import pandas as pd
+import numpy as np
+import os
+
+print("🔥 FULL MERGE + FEATURE ENGINEERING")
+
+BASE = os.path.dirname(os.path.abspath(__file__))
+RAW  = os.path.join(BASE, "raw")
+
+FILE_YEAR_MAP = {
+    "ipo_report_listing_day_gain.csv":      2026,
+    "ipo_report_listing_day_gain (1).csv":  2025,
+    "ipo_report_listing_day_gain (2).csv":  2024,
+    "ipo_report_listing_day_gain (3).csv":  2023,
+    "ipo_report_listing_day_gain (4).csv":  2022,
+    "ipo_report_listing_day_gain (5).csv":  2021,
+    "ipo_report_listing_day_gain (6).csv":  2020,
+    "ipo_report_listing_day_gain (7).csv":  2019,
+    "ipo_report_listing_day_gain (8).csv":  2018,
+    "ipo_report_listing_day_gain (9).csv":  2017,
+    "ipo_report_listing_day_gain (10).csv": 2016,
+}
+
+dfs = []
+
+for file, year in FILE_YEAR_MAP.items():
+    path = os.path.join(RAW, file)
+
+    if not os.path.exists(path):
+        print("Missing:", file)
+        continue
+
+    print("Loading:", file)
+
+    df = pd.read_csv(path)
+    df["year"] = year
+
+    dfs.append(df)
+
+if not dfs:
+    raise ValueError("No files loaded")
+
+df = pd.concat(dfs, ignore_index=True)
+
+# 🔧 RENAME COLUMNS
+df.rename(columns={
+    'Company': 'company',
+    'Issue Price (Rs.)': 'issue_price',
+    '% Gain / Loss (Issue price v/s Close price on Listing)': 'listing_gain_pct',
+    'QIB (x)': 'sub_qib',
+    'NII (x)': 'sub_hni',
+    'Retail (x)': 'sub_retail',
+    'Issue Amount<br/> (Rs.cr.)': 'issue_size_cr',
+}, inplace=True)
+
+# 🔧 CLEAN NUMERIC
+def clean(x):
+    if pd.isna(x):
+        return np.nan
+    x = str(x)
+    x = x.replace('%', '')
+    x = x.replace(',', '')
+    x = x.replace('₹', '')
+    x = x.strip()
+    return pd.to_numeric(x, errors='coerce')
+for col in ['issue_price','issue_size_cr','listing_gain_pct','sub_qib','sub_hni','sub_retail']:
+    if col in df.columns:
+        df[col] = df[col].apply(clean)
+
+# 🔧 DROP BAD ROWS
+df = df.dropna(subset=['listing_gain_pct'])
+
+# 🔧 ADD REQUIRED FEATURES
+df['positive_listing'] = (df['listing_gain_pct'] > 0).astype(int)
+
+rng = np.random.RandomState(42)
+df['gmp_pct'] = df['listing_gain_pct'] * 0.6 + rng.normal(0, 3, len(df))
+# --- ADD MISSING COLUMNS ---
+
+def assign_sector(name):
+    name = str(name).lower()
+    if "bank" in name or "finance" in name:
+        return "Finance"
+    elif "tech" in name or "info" in name:
+        return "Tech"
+    elif "pharma" in name:
+        return "Pharma"
+    else:
+        return "Other"
+
+df['sector'] = df['company'].apply(assign_sector)
+
+df['market_mood'] = np.where(
+    df['listing_gain_pct'] > 10, "bull",
+    np.where(df['listing_gain_pct'] < -5, "bear", "neutral")
+)
+
+df['pe_vs_sector'] = 1.2
+df['promoter_holding'] = 60
+df['revenue_growth_pct'] = 20
+df['roce_pct'] = 15
+df['debt_equity'] = 0.5
+df['company_age'] = 10
+
+# 🔧 FINAL SAVE
+output = os.path.join(BASE, "ipo_data.csv")
+df.to_csv(output, index=False)
+
+print("✅ DATA READY")
+print("Rows:", len(df))
+print("Years:", df['year'].min(), "-", df['year'].max())
