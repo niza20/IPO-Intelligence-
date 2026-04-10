@@ -2,51 +2,51 @@
   "classifier": {
     "name": "VotingEnsemble (RF+GB+LR)",
     "accuracy": 90.3,
-    "auc_roc": 0.966,
-    "cv_accuracy": 90.7,
+    "auc_roc": 0.967,
+    "cv_accuracy": 90.9,
     "confusion_matrix": [
       [
-        153,
-        20
+        152,
+        21
       ],
       [
-        38,
-        389
+        37,
+        390
       ]
     ]
   },
   "regressor": {
     "name": "RandomForest",
-    "mae": 13.43,
-    "rmse": 17.7,
-    "r2": 0.67
+    "mae": 13.44,
+    "rmse": 17.66,
+    "r2": 0.671
   },
   "model_comparison": {
     "Voting Ensemble": 90.3,
-    "Random Forest": 89.7,
-    "Gradient Boosting": 89.7,
-    "XGBoost": 89.0,
-    "Logistic Regression": 89.0
+    "Random Forest": 90.3,
+    "Gradient Boosting": 90.3,
+    "XGBoost": 89.7,
+    "Logistic Regression": 89.2
   },
   "top_features_clf": {
-    "GMP %": 0.4385,
-    "GMP\u00d7Mood": 0.1501,
-    "GMP\u00d7QIB": 0.1182,
-    "QIB Sub": 0.0416,
-    "Total Sub": 0.0381,
-    "Sub Score": 0.0379,
-    "Retail Sub": 0.0353,
-    "HNI Sub": 0.0321
+    "GMP %": 0.4959,
+    "GMP\u00d7Mood": 0.0948,
+    "GMP\u00d7QIB": 0.0938,
+    "QIB Sub": 0.0358,
+    "Total Sub": 0.0319,
+    "Sub Score": 0.0285,
+    "Retail Sub": 0.0283,
+    "HNI Sub": 0.0272
   },
   "top_features_reg": {
-    "GMP %": 0.4881,
-    "GMP\u00d7QIB": 0.146,
-    "GMP\u00d7Mood": 0.0863,
-    "Issue Price": 0.0434,
-    "QIB/HNI Ratio": 0.0399,
-    "Issue Size (log)": 0.0382,
-    "Retail Sub": 0.0349,
-    "HNI Sub": 0.0332
+    "GMP %": 0.4411,
+    "GMP\u00d7QIB": 0.1319,
+    "GMP\u00d7Mood": 0.0833,
+    "HNI Sub": 0.0279,
+    "Promoter %": 0.0279,
+    "QIB/HNI Ratio": 0.0273,
+    "Debt/Equity": 0.026,
+    "Issue Price": 0.0257
   },
   "dataset_size": 3000,
   "year_min": 2016,

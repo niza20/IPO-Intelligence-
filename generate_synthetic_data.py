@@ -54,9 +54,18 @@ stats = {}
 for col in NUM_COLS:
     if col in df_real.columns:
         s = df_real[col].dropna()
+        mean_val = float(s.mean())
+        std_val = float(s.std())
+        if pd.isna(std_val) or std_val == 0:
+            std_val = max(abs(mean_val) * 0.3, 1.0)
+            p02_val = mean_val - 2 * std_val
+            p98_val = mean_val + 2 * std_val
+        else:
+            p02_val = float(s.quantile(0.02))
+            p98_val = float(s.quantile(0.98))
         stats[col] = {
-            'mean': s.mean(), 'std': s.std(),
-            'p02':  s.quantile(0.02), 'p98': s.quantile(0.98),
+            'mean': mean_val, 'std': std_val,
+            'p02': p02_val, 'p98': p98_val,
         }
 
 sectors_dist = df_real['sector'].value_counts(normalize=True)

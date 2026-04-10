@@ -380,7 +380,7 @@ yr_max  = int(df_raw['year'].max())
 # Clean numeric for plotting
 for col in ['listing_gain_pct','gmp_pct','sub_qib','positive_listing']:
     if col in df_raw.columns:
-        df_raw[col] = pd.to_numeric(df_raw[col], errors='coerce')
+        df_raw[col] = clean_numeric(df_raw[col])
 
 fig, axes = plt.subplots(2, 3, figsize=(14, 8))
 fig.patch.set_facecolor(C['bg'])
@@ -441,9 +441,7 @@ fig.patch.set_facecolor(C['bg'])
 num_cols = ['gmp_pct','sub_qib','sub_hni','sub_retail','pe_vs_sector',
             'promoter_holding','revenue_growth_pct','roce_pct',
             'debt_equity','listing_gain_pct']
-for col in num_cols:
-    df_raw[col] = pd.to_numeric(df_raw[col], errors='coerce')
-corr = df_raw[num_cols].corr()
+corr = df[num_cols].corr()
 mask = np.triu(np.ones_like(corr, dtype=bool))
 sns.heatmap(corr, mask=mask, annot=True, fmt='.2f', cmap='coolwarm', ax=ax,
             linewidths=0.5, linecolor='white', annot_kws={'size':9},
